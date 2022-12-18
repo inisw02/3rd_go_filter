@@ -1,9 +1,9 @@
 {
     "BERT_MODEL" : "bert-base-multilingual-cased",
-    "PRE_TRAINED_MODEL" : "./assets/BERT_model.pt",
+    "PRE_TRAINED_MODEL" : "assets/BERT_model.pt",
     "CLASS_NAMES" : [
         "ABUSE", "CENSURE", "CRIME", "DISCRIMINATION", "HATE", "IMMORAL_NONE", "SEXUAL", "VIOLENCE"
     ],
-    "TOKENIZER_VOCAB" : "./assets/vocab.txt",
+    "TOKENIZER_VOCAB" : "assets/vocab.txt",
     "MAX_SEQUENCE_LEN" : 100
 }
