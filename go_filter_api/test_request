@@ -1,1 +1,0 @@
-http POST http://localhost:8000/inference sentence="홍어살에 살짝 소금을 찍어드시거나 고소한 소금기름장에 찍어드시면 더욱 진항 홍어맛을 느끼실 수 있어요."
