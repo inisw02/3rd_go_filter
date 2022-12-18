@@ -1,5 +1,5 @@
 {
-    "BERT_MODEL" : "bert_base_multilingual-cased",
+    "BERT_MODEL" : "bert-base-multilingual-cased",
     "PRE_TRAINED_MODEL" : "assets/BERT_model.pt",
     "CLASS_NAMES" : [
         "ABUSE", "CENSURE", "CRIME", "DISCRIMINATION", "HATE", "IMMORAL_NONE", "SEXUAL", "VIOLENCE"
