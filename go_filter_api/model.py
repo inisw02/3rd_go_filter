@@ -1,6 +1,5 @@
 import json
 import torch
-import torch.nn.funtional as F
 from transformers import BertTokenizer
 from keras_preprocessing.sequence import pad_sequences
 
