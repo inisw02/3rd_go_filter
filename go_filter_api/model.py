@@ -1,9 +1,8 @@
 import json
 import torch
-from transformers import BertTokenizer
+import torch.nn.funtional as F
+from transformers import BertTokenizer, BertForSequenceClassification
 from keras_preprocessing.sequence import pad_sequences
-
-from classifier import Classifier
 
 with open("config.json") as json_file:
     config = json.load(json_file)
@@ -12,8 +11,13 @@ class Model:
     def __init__(self):
         self.device = torch.device("cuda")
         self.tokenizer = BertTokenizer(vocab_file=config["TOKENIZER_VOCAB"])
-        classifier = Classifier(len(config["CLASS_NAMES"]))
-        classifier.load_state_dict(torch.load(config["PRE_TRAINED_MODEL"], map_location=self.device))
+        self.model = BertForSequenceClassification.from_pretrained(
+            config["BERT_MODEL"], 
+            num_labels=len(config["CLASS_NAMES"]), 
+            problem_type="multi_label_classification"
+            )
+        classifier = self.model
+        classifier.load_state_dict(torch.load(config["PRE_TRAINED_MODEL"]))
         classifier = classifier.eval()
         self.classifier = classifier.to(self.device)
     
