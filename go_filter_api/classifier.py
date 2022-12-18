@@ -2,7 +2,7 @@ import json
 
 from torch import nn
 import torch
-from transformers import BertTokenizer, BertForSequenceClassfication
+from transformers import BertTokenizer, BertForSequenceClassification
 from keras_preprocessing.sequence import pad_sequences
 
 with open('config.json') as json_file:
@@ -11,7 +11,7 @@ with open('config.json') as json_file:
 class Classifier(nn.Module):
     def __init__(self, n_classes):
         super(Classifier, self).__init__()
-        self.model = BertForSequenceClassfication.from_pretrained(config["BERT_MODEL"], num_labels=n_classes, problem_type="multi_label_classification")
+        self.model = BertForSequenceClassification.from_pretrained(config["BERT_MODEL"], num_labels=n_classes, problem_type="multi_label_classification")
         self.model = self.model.cuda()
         self.model = self.model.load_state_dict(torch.load(config["PRE_TRAINED_MODEL"]))
         self.tokenizer = BertTokenizer(vocab_file=config["TOKENIZER_VOCAB"])
