@@ -1,4 +1,3 @@
-//주석 풀기
 const browserAPI = (function () {
   if(chrome) return chrome;
   if(msBrowser) return msBrowser;
@@ -77,14 +76,14 @@ function GetCommentObjectText(commentObject) {
   return commentObject.querySelector(selectors.commentText)?.innerText ?? "";
 }
 
-// Check a comment object for any matches 찾았다 이놈
+// Check a comment object for any matches 
 function CheckCommentObject(commentObject) {
   const commentText = GetCommentObjectText(commentObject);
 
   // Track the amount of tests the comment passes
   let nMatches = 0;
 
-  // Loop through every test and check for any matches #조건문 여깄네
+  // Loop through every test and check for any matches 
   userOptions.tests.forEach((test) => {
     if (commentText.toLowerCase().match(test)) nMatches++;
   });
