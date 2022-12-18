@@ -9,9 +9,6 @@ app = FastAPI()
 
 model = Model()
 
-with open("Sentence.json", encoding='utf-8') as json_file:
-    Sentence = json.load(json_file)
-
 @app.post("/inference")
 def inference(Sentence : str):
     result = model.inference(Sentence)
