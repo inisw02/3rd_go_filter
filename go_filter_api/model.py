@@ -3,7 +3,7 @@ import torch
 from transformers import BertTokenizer
 from keras_preprocessing.sequence import pad_sequences
 
-from .classifier import Classifier
+from classifier import Classifier
 
 with open("config.json") as json_file:
     config = json.load(json_file)
