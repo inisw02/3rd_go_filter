@@ -1,0 +1,6 @@
+transformers
+fastapi
+nest-asyncio
+pyngrok
+uvicorn
+gdown
