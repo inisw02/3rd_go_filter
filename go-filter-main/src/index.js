@@ -33,7 +33,7 @@ const selectors = {
   commentText: "yt-formatted-string[id=content-text]",
 };
 
-// const commentElements = Array.from(document.querySelectorAll(selectors.commentText));
+const commentElements = Array.from(document.querySelectorAll(selectors.commentText));
 // console.log(commentElements)
 
 // Options for the observer
@@ -211,15 +211,15 @@ function waitForAddedNode(params) {
   });
 }
 
-// fetch('http://localhost:8000/inference', {
-//   method: "POST",
-//   // body : JSON.stringify({
-//   //   comments: commentElements[0]}
-//   // ),
-//   body : JSON.stringify({Sentence:commentElements}),
-//   // body : "Sentence=홍어",
-//   headers:{
-//     // 'Content-Type': 'application/x-www-form-urlencoded'
-//     'Content-Type': 'application/json'
-//   }
-// });
+fetch('http://localhost:8000/inference', {
+  method: "POST",
+  // body : JSON.stringify({
+  //   comments: commentElements[0]}
+  // ),
+  body : JSON.stringify({Sentence:commentElements}),
+  // body : "Sentence=홍어",
+  headers:{
+    // 'Content-Type': 'application/x-www-form-urlencoded'
+    'Content-Type': 'application/json'
+  }
+});
