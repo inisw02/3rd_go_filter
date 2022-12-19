@@ -1,3 +1,4 @@
+//주석 풀기
 const browserAPI = (function () {
   if(chrome) return chrome;
   if(msBrowser) return msBrowser;
@@ -76,14 +77,14 @@ function GetCommentObjectText(commentObject) {
   return commentObject.querySelector(selectors.commentText)?.innerText ?? "";
 }
 
-// Check a comment object for any matches 
+// Check a comment object for any matches 찾았다 이놈
 function CheckCommentObject(commentObject) {
   const commentText = GetCommentObjectText(commentObject);
 
   // Track the amount of tests the comment passes
   let nMatches = 0;
 
-  // Loop through every test and check for any matches 
+  // Loop through every test and check for any matches #조건문 여깄네
   userOptions.tests.forEach((test) => {
     if (commentText.toLowerCase().match(test)) nMatches++;
   });
@@ -161,14 +162,14 @@ function InitMainObserver() {
     };
     }
 
-  }
+  
   waitForAddedNode({
     id: 'contents',
     parent: document.querySelector(selectors.ytdComments),
     recursive: true,
     done: CreateMainObserver
   });
-
+}
 
 // We observe the document's title for when the user moves onto another video
 function main() {
@@ -212,12 +213,15 @@ function waitForAddedNode(params) {
 
 const commentElements = Array.from(document.querySelectorAll(selectors.commentText));
 
-fetch('https://localhost:3001/test', {
+fetch('http://localhost:8000/inference', {
   method: "POST",
-  body : JSON.stringify({
-    comments: commentElements}
-  ),
+  // body : JSON.stringify({
+  //   comments: commentElements[0]}
+  // ),
+  body : JSON.stringify({Sentence:commentElements}),
+  // body : "Sentence=홍어",
   headers:{
+    // 'Content-Type': 'application/x-www-form-urlencoded'
     'Content-Type': 'application/json'
   }
 });
