@@ -4,3 +4,4 @@ nest-asyncio
 pyngrok
 uvicorn
 gdown
+google-api-python-client
