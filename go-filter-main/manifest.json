@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "GO-Filter for Youtube",
     "description": "An extension for filtering YouTube comments with SOTA PLM model",
-    "version": "0.1",
+    "version": "0.2",
     "author": ["Lee Jihun", "Yang Jaehyeok"],
 
     "icons": {
@@ -25,17 +25,12 @@
         "open_in_tab": true
     },
 
-    "browser_action": {
+    "action": {
         "default_popup": "src/popup.html",
         "default_icon": "media/icon-48.png"
     },
 
-    "permissions": ["storage", "https://localhost:3001/*"],
-    "host_permissions": ["https://www.youtube.com/*", "https://localhost:3001/*"],
-
-    "browser_specific_settings": {
-        "gecko": {
-          "id": "{2bd9aae6-e027-4092-acf6-c4a9bef97247}"
-        }
-    }     
+    "permissions": ["storage", "https://localhost:8000/*"],
+    "host_permissions": ["https://www.youtube.com/*", "https://localhost:8000/*"]
+    
 }
