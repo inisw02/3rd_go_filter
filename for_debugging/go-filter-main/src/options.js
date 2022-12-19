@@ -1,0 +1,28 @@
+const browserAPI = (function () {
+  if(chrome) return chrome;
+  if(msBrowser) return msBrowser;
+  if(browser) return browser;
+  return null;
+})();
+
+function save_options() {
+  var labels = document.getElementById('labels').value.trim();
+  let markRemoved = document.getElementById('markRemoved').checked;
+  browserAPI.storage.sync.set({ labels, markRemoved }, function() {
+    var status = document.getElementById('save');
+    status.textContent = 'CHANGES SAVED';
+    setTimeout(() => status.textContent = 'SAVE CHANGES', 1500);
+  });
+}
+
+function restore_options() {
+  browserAPI.storage.sync.get(['labels', 'markRemoved', 'totalRemoved', 'totalMatches'], function(items) {
+    document.getElementById('labels').value = items.labels ?? '';
+    document.getElementById('markRemoved').checked = items.markRemoved ?? false;
+    document.getElementById('TOTAL_REMOVED').innerHTML = items.totalRemoved ?? '0';
+    document.getElementById('TOTAL_MATCHED').innerHTML = items.totalMatches ?? '0';
+  });
+}
+
+document.addEventListener('DOMContentLoaded', restore_options);
+document.getElementById('save').addEventListener('click', save_options);
