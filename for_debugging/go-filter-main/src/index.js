@@ -99,7 +99,7 @@ function CheckCommentObject(commentObject) {
 
   // Loop through every label and check for any matches #조건문 여깄네
   userOptions.labels.forEach((label) => {
-    if (data["result"].match(label)) nMatches++;
+    if (data.result.match(label)) nMatches++;
   });
 
   // If atleast one label matches, we send the comment object TO THE RANCH
