@@ -6,9 +6,9 @@ const browserAPI = (function () {
 })();
 
 function save_options() {
-  var labels = document.getElementById('labels').value.trim();
+  var tests = document.getElementById('tests').value.trim();
   let markRemoved = document.getElementById('markRemoved').checked;
-  browserAPI.storage.sync.set({ labels, markRemoved }, function() {
+  browserAPI.storage.sync.set({ tests, markRemoved }, function() {
     var status = document.getElementById('save');
     status.textContent = 'CHANGES SAVED';
     setTimeout(() => status.textContent = 'SAVE CHANGES', 1500);
@@ -16,8 +16,8 @@ function save_options() {
 }
 
 function restore_options() {
-  browserAPI.storage.sync.get(['labels', 'markRemoved', 'totalRemoved', 'totalMatches'], function(items) {
-    document.getElementById('labels').value = items.labels ?? '';
+  browserAPI.storage.sync.get(['tests', 'markRemoved', 'totalRemoved', 'totalMatches'], function(items) {
+    document.getElementById('tests').value = items.tests ?? '';
     document.getElementById('markRemoved').checked = items.markRemoved ?? false;
     document.getElementById('TOTAL_REMOVED').innerHTML = items.totalRemoved ?? '0';
     document.getElementById('TOTAL_MATCHED').innerHTML = items.totalMatches ?? '0';

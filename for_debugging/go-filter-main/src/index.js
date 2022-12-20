@@ -33,8 +33,8 @@ const selectors = {
   commentText: "yt-formatted-string[id=content-text]",
 };
 
-// const commentElements = Array.from(document.querySelectorAll(selectors.commentText));
-// // console.log(commentElements)
+const commentElements = Array.from(document.querySelectorAll(selectors.commentText));
+// console.log(commentElements)
 
 // Options for the observer
 const observerOptions = {
@@ -43,27 +43,31 @@ const observerOptions = {
   childList: true,
 };
 
-// A collection of RegEx expressions to label comments with.
-// If a comments labels true with any given expression, it will be removed.
+// A collection of RegEx expressions to test comments with.
+// If a comments tests true with any given expression, it will be removed.
 
 // TODO: Instead of getting rid of the comment, simply hide it and allow the user
 // To view the comment if they wish to
 let userOptions = {
-  labels: [],
+  tests: [],
   markRemoved: false,
 };
 
 function LoadOptions() {
-  browserAPI.storage.sync.get(['labels', 'markRemoved'], (items) => {
+  browserAPI.storage.sync.get(['tests', 'markRemoved'], (items) => {
+    console.log(items.markRemoved);
+
     DebugLog("Loading user options...");
 
-    // Load labels
-    let temp = (items.labels ?? '').split("\n");
-    userOptions.labels = [];
-    for (let label of temp) {
-      userOptions.labels.push(new RegExp(`(${label})`, "ig"));
+    // Load tests
+    let temp = (items.tests ?? '').split("\n");
+    userOptions.tests = [];
+    for (let test of temp) {
+      userOptions.tests.push(test);      
     }
-    DebugLog(userOptions.labels);
+    console.log(userOptions.tests);
+    DebugLog(userOptions.tests);
+    
 
     // set markRemoved
     userOptions.markRemoved = items.markRemoved ?? false;
@@ -81,33 +85,33 @@ function GetCommentObjectText(commentObject) {
 // Check a comment object for any matches 찾았다 이놈
 function CheckCommentObject(commentObject) {
   const commentText = GetCommentObjectText(commentObject);
-
+  console.log(commentText);
   const endpoint = "http://localhost:8000/inference";
   const headers = { "Content-Type": "application/json" };
-  const payload = { "Sentence": commentText };
-  
-  // Track the amount of labels the comment passes
+
+  // Track the amount of tests the comment passes
   let nMatches = 0;
 
-  const response = fetch(endpoint, {
+  fetch(endpoint, {
     method: "POST",
     headers: headers,
-    body: JSON.stringify(payload),
+    body: JSON.stringify({Sentence:commentText}),
+  }).then((response) => response.json());
+  
+  // console.log("response")
+  console.log(response);
+
+  // Loop through every test and check for any matches #조건문 여깄네
+  userOptions.tests.forEach((test) => {
+    if (response["result"].match(test)) nMatches++;
   });
+  console.log(nMatches);
 
-  const data = response.json();
-
-  // Loop through every label and check for any matches #조건문 여깄네
-  userOptions.labels.forEach((label) => {
-    if (data.result.match(label)) nMatches++;
-  });
-
-  // If atleast one label matches, we send the comment object TO THE RANCH
+  // If atleast one test matches, we send the comment object TO THE RANCH
   if (nMatches > 0) {
     RemoveCommentObject(commentObject, nMatches, commentText);
   }
 }
-
 
 // Remove a comment from the DOM and log our heroic actions
 function RemoveCommentObject(commentObject, nMatches, commentText) {
@@ -164,7 +168,7 @@ function InitMainObserver() {
     observer.disconnect();
     observer = undefined;
     DebugLog("Disconnected old observer");
-  }
+  } 
 
   function CreateMainObserver() {
     let targetYtdComments = document.querySelector(selectors.root);
