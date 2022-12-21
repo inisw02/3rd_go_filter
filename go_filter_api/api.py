@@ -30,7 +30,9 @@ class item_(BaseModel):
 @app.post("/inference")
 def inference(Sentence : item_):
     result = model.inference(Sentence.Sentence)
-    return {'result':result}
+    result = {'result':result}
+    result = json.dumps(result)
+    return result
     
     # pass
 
