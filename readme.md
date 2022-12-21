@@ -9,7 +9,7 @@ $ cd ./go_filter_api/
 $ uvicorn api:app --reload
 
 # run browser extension 
-open Extension Option page or popup then input labels what you want to filter out.
+1. open Extension Option page or popup page then write labels what you want to filter out on youtube comments.
 - ABUSE
 - CENSURE
 - CRIME
@@ -18,3 +18,6 @@ open Extension Option page or popup then input labels what you want to filter ou
 - SEXUAL
 - VIOLENCE
 
+2. save the option
+
+3. enjoy videos without 'bad' comments make you feel bad. 
