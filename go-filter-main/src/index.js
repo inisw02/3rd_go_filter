@@ -86,15 +86,14 @@ function GetCommentObjectText(commentObject) {
 // Check a comment object for any matches 찾았다 이놈
 function CheckCommentObject(commentObject) {
   const commentText = GetCommentObjectText(commentObject);
-  console.log(commentText);
   const endpoint = "http://localhost:8000/inference";
   const headers = { "Content-Type": "application/json" };
 
   // Track the amount of tests the comment passes
   let nMatches = 0;
 
-  function LoadData() {
-    return fetch(endpoint, {
+  async function LoadData(commentText) {
+    return await fetch(endpoint, {
       method: "POST",
       headers: headers,
       body: JSON.stringify({Sentence:commentText}),
@@ -102,24 +101,65 @@ function CheckCommentObject(commentObject) {
     .then((data) => data.result);
   }
   
-  LoadData().then((result) => { console.log(result)})
+  // userOptions.tests.forEach((test) => {
+  //   (async () => {
+  //     let results = await fetch(endpoint, {
+  //       method: "POST",
+  //       headers: headers,
+  //       body: JSON.stringify({Sentence:commentText}),
+  //     });
+  //     console.log(results);
+  //     let outputs = await results.json();
+  //     return outputs
+  //   })
+  //   if (.toString().match(test)) nMatches++;
+  // });
+
+  // LoadData(commentText).then((result) => { console.log(result)})
 
   // Loop through every test and check for any matches #조건문 여깄네
-  userOptions.tests.forEach((test) => {
-    if (LoadData().then((result)).match(test)) nMatches++;
-  });
-  console.log(nMatches);
+  // userOptions.tests.forEach((test) => {
+  //   // const output = LoadData(commentText)
+  //   const op = new Promise((resolve, reject) => {
+  //     if (LoadData(commentText)) {
+  //       return resolve(LoadData(commentText));
+  //     } else {
+  //       return reject("ERROR");
+  //     }
+  //     });
+  //     console.log(op.then())
+  //     if (op.toString().match(test)) nMatches++;})
+    
+  // console.log(nMatches);
+  async function output(commentText) {
+    console.log(commentText);
+    let ops = await LoadData(commentText);
+    if (userOptions.tests.includes(ops.toString())) nMatches++;
+    if (nMatches > 0) {
+      RemoveCommentObject(commentObject, nMatches, commentText);
+    };
+  };
+
+  output(commentText);
+
+  // let op = output(commentText)
+  // console.log(op.then());
+
+  // userOptions.tests.forEach((test) => {
+    
+  //   if (op.toString().match(test)) nMatches++;
+  // });
+  
+
+  
 
   // If atleast one test matches, we send the comment object TO THE RANCH
-  if (nMatches > 0) {
-    RemoveCommentObject(commentObject, nMatches, commentText);
-  }
+  
 }
 
 // Remove a comment from the DOM and log our heroic actions
 function RemoveCommentObject(commentObject, nMatches, commentText) {
   if (commentObject) {
-
     if(userOptions.markRemoved) {
       commentObject.innerHTML = removedCommentMarker;
     } else commentObject.remove();
