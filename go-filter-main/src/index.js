@@ -55,15 +55,19 @@ let userOptions = {
 
 function LoadOptions() {
   browserAPI.storage.sync.get(['tests', 'markRemoved'], (items) => {
+    console.log(items.markRemoved);
+
     DebugLog("Loading user options...");
 
     // Load tests
     let temp = (items.tests ?? '').split("\n");
     userOptions.tests = [];
     for (let test of temp) {
-      userOptions.tests.push(new RegExp(`(${test})`, "ig"));
+      userOptions.tests.push(test);      
     }
+    console.log(userOptions.tests);
     DebugLog(userOptions.tests);
+    
 
     // set markRemoved
     userOptions.markRemoved = items.markRemoved ?? false;
@@ -78,17 +82,33 @@ function GetCommentObjectText(commentObject) {
   return commentObject.querySelector(selectors.commentText)?.innerText ?? "";
 }
 
+
 // Check a comment object for any matches 찾았다 이놈
 function CheckCommentObject(commentObject) {
   const commentText = GetCommentObjectText(commentObject);
+  console.log(commentText);
+  const endpoint = "http://localhost:8000/inference";
+  const headers = { "Content-Type": "application/json" };
 
   // Track the amount of tests the comment passes
   let nMatches = 0;
 
+  function LoadData() {
+    return fetch(endpoint, {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify({Sentence:commentText}),
+    }).then((response) => response.json())
+    .then((data) => data.result);
+  }
+  
+  LoadData().then((result) => { console.log(result)})
+
   // Loop through every test and check for any matches #조건문 여깄네
   userOptions.tests.forEach((test) => {
-    if (commentText.toLowerCase().match(test)) nMatches++;
+    if (LoadData().then((result)).match(test)) nMatches++;
   });
+  console.log(nMatches);
 
   // If atleast one test matches, we send the comment object TO THE RANCH
   if (nMatches > 0) {
@@ -151,7 +171,7 @@ function InitMainObserver() {
     observer.disconnect();
     observer = undefined;
     DebugLog("Disconnected old observer");
-  }
+  } 
 
   function CreateMainObserver() {
     let targetYtdComments = document.querySelector(selectors.root);
@@ -210,16 +230,3 @@ function waitForAddedNode(params) {
       childList: true,
   });
 }
-
-fetch('http://localhost:8000/inference', {
-  method: "POST",
-  // body : JSON.stringify({
-  //   comments: commentElements[0]}
-  // ),
-  body : JSON.stringify({Sentence:commentElements}),
-  // body : "Sentence=홍어",
-  headers:{
-    // 'Content-Type': 'application/x-www-form-urlencoded'
-    'Content-Type': 'application/json'
-  }
-});
