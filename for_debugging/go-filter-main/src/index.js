@@ -82,6 +82,7 @@ function GetCommentObjectText(commentObject) {
   return commentObject.querySelector(selectors.commentText)?.innerText ?? "";
 }
 
+
 // Check a comment object for any matches 찾았다 이놈
 function CheckCommentObject(commentObject) {
   const commentText = GetCommentObjectText(commentObject);
@@ -92,18 +93,20 @@ function CheckCommentObject(commentObject) {
   // Track the amount of tests the comment passes
   let nMatches = 0;
 
-  fetch(endpoint, {
-    method: "POST",
-    headers: headers,
-    body: JSON.stringify({Sentence:commentText}),
-  }).then((response) => response.json());
+  function LoadData() {
+    return fetch(endpoint, {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify({Sentence:commentText}),
+    }).then((response) => response.json())
+    .then((data) => data.result);
+  }
   
-  // console.log("response")
-  console.log(response);
+  LoadData().then((result) => { console.log(result)})
 
   // Loop through every test and check for any matches #조건문 여깄네
   userOptions.tests.forEach((test) => {
-    if (response["result"].match(test)) nMatches++;
+    if (LoadData().then((result)).match(test)) nMatches++;
   });
   console.log(nMatches);
 
